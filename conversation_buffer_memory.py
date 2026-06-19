@@ -1,8 +1,8 @@
 import os
 
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
-from langchain_classic.chains import ConversationChain  # type: ignore
-from langchain_classic.memory import ConversationBufferMemory  # type: ignore
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
 
 from read_key import hf_provider, hf_token
 
@@ -19,11 +19,35 @@ endpoint = HuggingFaceEndpoint(
 
 chat_model = ChatHuggingFace(llm=endpoint)
 
-memory = ConversationBufferMemory()
-conversation = ConversationChain(llm=chat_model, memory=memory, verbose=True)
+prompt = ChatPromptTemplate.from_messages([
+    ("system", (
+        "The following is a friendly conversation between a human and an AI. "
+        "The AI is talkative and provides lots of specific details from its context. "
+        "If the AI does not know the answer to a question, it truthfully says it does not know."
+    )),
+    MessagesPlaceholder(variable_name="history"),
+    ("human", "{input}"),
+])
 
-conversation.predict(input="Hi, my name is Karim")
-conversation.predict(input="What is 1+1?")
-conversation.predict(input="What is my name?")
+chain = prompt | chat_model
 
-print(memory.buffer)
+history: list[BaseMessage] = []
+
+def chat(user_input: str) -> str:
+    messages = prompt.format_messages(input=user_input, history=history)
+    print("\n> Entering new ConversationChain chain...")
+    print("Prompt after formatting:")
+    for m in messages:
+        print(f"{m.type.capitalize()}: {m.content}")
+    response = chain.invoke({"input": user_input, "history": history})
+    print(f"AI: {response.content}")
+    print("\n> Finished chain.")
+    history.append(HumanMessage(content=user_input))
+    history.append(AIMessage(content=response.content))
+    return response.content
+
+chat("Hi, my name is Karim")
+chat("What is 1+1?")
+chat("What is my name?")
+
+print("\n".join(f"{m.type}: {m.content}" for m in history))
