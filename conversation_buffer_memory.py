@@ -51,3 +51,17 @@ chat("What is 1+1?")
 chat("What is my name?")
 
 print("\n".join(f"{m.type}: {m.content}" for m in history))
+
+
+print({"history": history})
+
+demo_history: list[BaseMessage] = []
+demo_history.append(HumanMessage(content="Hi"))
+demo_history.append(AIMessage(content="What's up"))
+print("\n".join(f"{m.type}: {m.content}" for m in demo_history))
+
+print({"history": demo_history})
+
+demo_history.append(HumanMessage(content="Not much, just hanging"))
+demo_history.append(AIMessage(content="Cool"))
+print({"history": demo_history})
