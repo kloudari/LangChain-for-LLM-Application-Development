@@ -27,7 +27,7 @@ style = """American English \
 in a calm and respectful tone
 """
 
-prompt = f"""Translate the text \
+prompt = f"""Translate (don't answer) the text \
 that is delimited by triple backticks 
 into a style that is {style}.
 text: ```{customer_email}```
