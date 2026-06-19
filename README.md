@@ -5,16 +5,23 @@ A learning project exploring how to use LangChain with Large Language Models (LL
 
 ## Project Overview
 
-This project demonstrates two approaches to interacting with Hugging Face LLMs:
+This project is structured by course chapters. Each chapter covers a specific LangChain concept, with scripts adapted to use Hugging Face instead of the original OpenAI backend.
 
-1. **Classic Approach** (`call_llm_model_classic.py`) - Direct use of the Hugging Face InferenceClient API
-2. **LangChain Approach** (`call_llm_model_langchain.py`) - Using LangChain's abstractions and prompt templates
+## Chapters
 
-## Files
+### Chapter 1 — Models, Prompts and Parsers
+
+Introduces LangChain's core building blocks: prompt templates, chat models, output parsers, and chains.
+
+| File | Description |
+|------|-------------|
+| `call_llm_model_classic.py` | Direct LLM calls using the Hugging Face `InferenceClient` (no LangChain) |
+| `call_llm_model_langchain.py` | Same use case rewritten with `ChatPromptTemplate`, `ChatHuggingFace`, and `StrOutputParser` |
+| `extract_review_info.py` | Structured extraction from a product review using `JsonOutputParser` |
+
+## Shared Files
 
 - `read_key.py` - Initializes the Hugging Face client with authentication
-- `call_llm_model_classic.py` - Direct LLM calls using InferenceClient
-- `call_llm_model_langchain.py` - LangChain chains with prompt templates
 - `.env` - Environment variables
 
 ## Setup
@@ -45,22 +52,20 @@ This project demonstrates two approaches to interacting with Hugging Face LLMs:
 
 ## Usage
 
-### Classic Approach
+### Chapter 1
 ```bash
-python call_llm_model_classic.py
+python call_llm_model_classic.py   # classic API approach
+python call_llm_model_langchain.py  # LangChain approach
+python extract_review_info.py       # structured JSON extraction
 ```
 
-### LangChain Approach
-```bash
-python call_llm_model_langchain.py
-```
+## Key Concepts by Chapter
 
-## Key Features
-
-- Text translation and style transformation
-- Prompt templating with LangChain
-- Model switching and configuration
-- Error handling for API calls
+### Chapter 1 — Models, Prompts and Parsers
+- Direct vs. LangChain-abstracted LLM calls
+- `ChatPromptTemplate` and input variables
+- `StrOutputParser` and `JsonOutputParser`
+- Building chains with the `|` operator
 
 ## Environment Variables
 
