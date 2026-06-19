@@ -1,5 +1,6 @@
 # LangChain for LLM Application Development
 
+Based on : https://www.deeplearning.ai/courses/langchain
 A learning project exploring how to use LangChain with Large Language Models (LLMs) for application development, comparing traditional API approaches with LangChain's abstractions.
 
 ## Project Overview
