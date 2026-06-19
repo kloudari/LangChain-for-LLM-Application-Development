@@ -19,6 +19,14 @@ Introduces LangChain's core building blocks: prompt templates, chat models, outp
 | `call_llm_model_langchain.py` | Same use case rewritten with `ChatPromptTemplate`, `ChatHuggingFace`, and `StrOutputParser` |
 | `extract_review_info.py` | Structured extraction from a product review using `JsonOutputParser` |
 
+### Chapter 2 — Memory
+
+Explores how to give LLMs short-term conversational memory using `ConversationBufferMemory` and `ConversationChain`.
+
+| File | Description |
+|------|-------------|
+| `conversation_buffer_memory.py` | Multi-turn conversation using `ConversationChain` with `ConversationBufferMemory` to retain the full history |
+
 ## Shared Files
 
 - `read_key.py` - Initializes the Hugging Face client with authentication
@@ -41,8 +49,10 @@ Introduces LangChain's core building blocks: prompt templates, chat models, outp
 
 2. Install dependencies:
    ```bash
-   pip install langchain langchain-huggingface python-dotenv
+   pip install langchain langchain-classic langchain-community langchain-huggingface python-dotenv
    ```
+
+   > **Note:** `langchain-classic` is required for `ConversationChain` and `ConversationBufferMemory`, which were removed from the core `langchain` package in version 1.x.
 
 3. Create a `.env` file with your Hugging Face token:
    ```
@@ -59,6 +69,11 @@ python call_llm_model_langchain.py  # LangChain approach
 python extract_review_info.py       # structured JSON extraction
 ```
 
+### Chapter 2
+```bash
+python conversation_buffer_memory.py  # multi-turn conversation with memory
+```
+
 ## Key Concepts by Chapter
 
 ### Chapter 1 — Models, Prompts and Parsers
@@ -66,6 +81,11 @@ python extract_review_info.py       # structured JSON extraction
 - `ChatPromptTemplate` and input variables
 - `StrOutputParser` and `JsonOutputParser`
 - Building chains with the `|` operator
+
+### Chapter 2 — Memory
+- `ConversationBufferMemory` to store the full conversation history
+- `ConversationChain` to wire memory into a chat model
+- Inspecting accumulated history via `memory.buffer`
 
 ## Environment Variables
 
