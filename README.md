@@ -21,11 +21,14 @@ Introduces LangChain's core building blocks: prompt templates, chat models, outp
 
 ### Chapter 2 — Memory
 
-Explores how to give LLMs short-term conversational memory using `ConversationBufferMemory` and `ConversationChain`.
+Explores different memory types to manage conversational context in multi-turn interactions, comparing memory retention strategies:
 
 | File | Description |
 |------|-------------|
-| `conversation_buffer_memory.py` | Multi-turn conversation using `ConversationChain` with `ConversationBufferMemory` to retain the full history |
+| `conversation_buffer_memory.py` | **ConversationBufferMemory** — Retains the full conversation history; simple but can grow unbounded |
+| `conversation_buffer_window_memory.py` | **ConversationBufferWindowMemory** — Keeps only the last N messages; prevents unbounded growth |
+| `conversation_token_buffer_memory.py` | **ConversationTokenBufferMemory** — Keeps messages up to a token limit; manages memory by token count |
+| `conversation_summary_memory.py` | **ConversationSummaryMemory** — Summarizes old messages; condenses history while preserving key information |
 
 ## Shared Files
 
@@ -71,7 +74,10 @@ python extract_review_info.py       # structured JSON extraction
 
 ### Chapter 2
 ```bash
-python conversation_buffer_memory.py  # multi-turn conversation with memory
+python conversation_buffer_memory.py              # full history (ConversationBufferMemory)
+python conversation_buffer_window_memory.py       # last N messages only
+python conversation_token_buffer_memory.py        # token-limited history
+python conversation_summary_memory.py             # AI-summarized history
 ```
 
 ## Key Concepts by Chapter
@@ -83,9 +89,12 @@ python conversation_buffer_memory.py  # multi-turn conversation with memory
 - Building chains with the `|` operator
 
 ### Chapter 2 — Memory
-- `ConversationBufferMemory` to store the full conversation history
+- **ConversationBufferMemory** — Full history retention (simple, unbounded growth)
+- **ConversationBufferWindowMemory** — Last N messages only (fixed window)
+- **ConversationTokenBufferMemory** — Token-based retention (memory limit in tokens)
+- **ConversationSummaryMemory** — LLM-powered summarization (condenses conversation)
 - `ConversationChain` to wire memory into a chat model
-- Inspecting accumulated history via `memory.buffer`
+- Comparing memory strategies for long conversations
 
 ## Environment Variables
 
