@@ -59,6 +59,15 @@ Covers how to assess the quality of RAG pipelines by comparing model answers aga
 | `qa_manual_evaluation.py` | **Manual evaluation** — Runs 5 hard-coded `(query, expected answer)` pairs through the RAG pipeline, performs keyword-overlap scoring, and prints a `CORRECT / INCORRECT` verdict with a final score |
 | `qa_llm_evaluation.py` | **LLM-assisted evaluation** — Same QA pairs evaluated by `QAEvalChain` (LLM-as-judge): the model compares each prediction against the expected answer and returns a `CORRECT / INCORRECT` grade |
 
+### Chapter 6 — Agents
+
+Demonstrates how LLM agents dynamically decide which tools to call in order to solve a task, using the ReAct (Reason + Act) pattern.
+
+| File | Description |
+|------|-------------|
+| `agents_python.py` | **Python agent** — Equips the LLM with a `python_repl` tool to execute arbitrary Python code; used to sort a customer list by last name then first name |
+| `agents_custom_tools.py` | **Custom tools agent** — Defines and registers 6 hand-crafted tools (`time`, `calculator`, `text_stats`, `celsius_to_fahrenheit`, `fahrenheit_to_celsius`, `reverse_string`) and runs a demo query for each |
+
 ## Shared Files
 
 - `read_key.py` - Initializes the Hugging Face client with authentication
@@ -133,6 +142,12 @@ python qa_manual_evaluation.py     # Manual evaluation — hard-coded QA pairs w
 python qa_llm_evaluation.py        # LLM-assisted evaluation — QAEvalChain grades each prediction
 ```
 
+### Chapter 6
+```bash
+python agents_python.py            # Python agent — sorts a list by executing generated code
+python agents_custom_tools.py      # Custom tools agent — date, calculator, text stats, temperature, string reversal
+```
+
 ## Key Concepts by Chapter
 
 ### Chapter 1 — Models, Prompts and Parsers
@@ -169,6 +184,14 @@ python qa_llm_evaluation.py        # LLM-assisted evaluation — QAEvalChain gra
 - **LLM-assisted evaluation** — `QAEvalChain.from_llm(llm)` uses the model itself as a judge; it compares each prediction against the expected answer and returns `CORRECT` / `INCORRECT`
 - **`QAEvalChain`** — from `langchain_classic.evaluation.qa`; accepts `examples` (with `query` / `answer` keys) and `predictions` (with `result` key)
 - **Verdict & score** — each example is labelled and a final `X/N (%)` score is printed for both approaches
+
+### Chapter 6 — Agents
+- **ReAct pattern** — agent reasons (Thought) then acts (Action/Observation) in a loop until the task is solved
+- **`@tool` decorator** — turns any Python function into a LangChain tool; the docstring becomes the tool description the LLM reads
+- **`create_tool_calling_agent`** — modern LCEL-based agent builder; pairs with `AgentExecutor` to run the loop
+- **`AgentExecutor`** — orchestrates the Thought → Action → Observation loop with `verbose=True` tracing and `handle_parsing_errors=True` for robustness
+- **Built-in tools** — `python_repl` executes generated code in a sandboxed stdout buffer
+- **Custom tools** — `time` (today's date), `calculator` (safe `eval` with `math`), `text_stats` (word/char count), temperature converters, `reverse_string`
 
 ## Environment Variables
 
