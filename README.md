@@ -27,7 +27,7 @@ Explores different memory types to manage conversational context in multi-turn i
 |------|-------------|
 | `conversation_buffer_memory.py` | **ConversationBufferMemory** — Retains the full conversation history; simple but can grow unbounded |
 | `conversation_buffer_window_memory.py` | **ConversationBufferWindowMemory** — Keeps only the last N messages; prevents unbounded growth |
-| `conversation_token_buffer_memory.py` | **ConversationTokenBufferMemory** — Keeps messages up to a token limit; manages memory by token count |
+| `conversation_buffer_token_memory.py` | **ConversationTokenBufferMemory** — Keeps messages up to a token limit; manages memory by token count |
 | `conversation_summary_memory.py` | **ConversationSummaryMemory** — Summarizes old messages; condenses history while preserving key information |
 
 ### Chapter 3 — Chains
@@ -65,6 +65,7 @@ Demonstrates how LLM agents dynamically decide which tools to call in order to s
 
 | File | Description |
 |------|-------------|
+| `agents.py` | **LangGraph agent** — Uses `create_agent` (LangChain 1.x / LangGraph API) with a `calculator` tool and a `WikipediaQueryRun` tool; demonstrates math computation and Wikipedia lookup |
 | `agents_python.py` | **Python agent** — Equips the LLM with a `python_repl` tool to execute arbitrary Python code; used to sort a customer list by last name then first name |
 | `agents_custom_tools.py` | **Custom tools agent** — Defines and registers 6 hand-crafted tools (`time`, `calculator`, `text_stats`, `celsius_to_fahrenheit`, `fahrenheit_to_celsius`, `reverse_string`) and runs a demo query for each |
 
@@ -100,6 +101,11 @@ Demonstrates how LLM agents dynamically decide which tools to call in order to s
    pip install sentence-transformers
    ```
 
+   For Chapter 6 (`agents.py`), also install:
+   ```bash
+   pip install wikipedia langchain-community
+   ```
+
 3. Create a `.env` file with your Hugging Face token:
    ```
    HF_TOKEN=your_token_here
@@ -119,7 +125,7 @@ python extract_review_info.py       # structured JSON extraction
 ```bash
 python conversation_buffer_memory.py              # full history (ConversationBufferMemory)
 python conversation_buffer_window_memory.py       # last N messages only
-python conversation_token_buffer_memory.py        # token-limited history
+python conversation_buffer_token_memory.py        # token-limited history
 python conversation_summary_memory.py             # AI-summarized history
 ```
 
@@ -144,6 +150,7 @@ python qa_llm_evaluation.py        # LLM-assisted evaluation — QAEvalChain gra
 
 ### Chapter 6
 ```bash
+python agents.py                   # LangGraph agent — math (calculator) and Wikipedia lookup
 python agents_python.py            # Python agent — sorts a list by executing generated code
 python agents_custom_tools.py      # Custom tools agent — date, calculator, text stats, temperature, string reversal
 ```
@@ -186,6 +193,8 @@ python agents_custom_tools.py      # Custom tools agent — date, calculator, te
 - **Verdict & score** — each example is labelled and a final `X/N (%)` score is printed for both approaches
 
 ### Chapter 6 — Agents
+- **`create_agent`** — LangGraph-based agent API (LangChain 1.x); takes an LLM and a list of tools and returns a compiled agent graph
+- **`WikipediaQueryRun`** — wraps the `wikipedia` package to give the agent a live knowledge lookup tool
 - **ReAct pattern** — agent reasons (Thought) then acts (Action/Observation) in a loop until the task is solved
 - **`@tool` decorator** — turns any Python function into a LangChain tool; the docstring becomes the tool description the LLM reads
 - **`create_tool_calling_agent`** — modern LCEL-based agent builder; pairs with `AgentExecutor` to run the loop
