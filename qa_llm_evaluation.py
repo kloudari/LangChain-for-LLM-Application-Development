@@ -54,30 +54,21 @@ index = VectorstoreIndexCreator(
 ).from_loaders([loader])
 
 # ---------------------------------------------------------------------------
-# Hard-coded evaluation examples: (query, expected answer)
+# LLM-generated evaluation examples via QAGenerateChain
 # QAEvalChain expects keys "query" and "answer"
 # ---------------------------------------------------------------------------
+from langchain_classic.evaluation.qa import QAGenerateChain
+
+docs = loader.load()
+generate_chain = QAGenerateChain.from_llm(llm)
+
+# Generate one QA pair per document (use a subset to keep runtime reasonable)
+sample_docs = docs[:5]
+generated = generate_chain.apply([{"doc": d} for d in sample_docs])
+
 examples = [
-    {
-        "query": "Do the SunShield Hiking Shirt offer sun protection?",
-        "answer": "Yes, the SunShield Hiking Shirt offers UPF 50+ sun protection.",
-    },
-    {
-        "query": "What is the fill power of the DownDrift Insulated Jacket?",
-        "answer": "The DownDrift Insulated Jacket has 700-fill-power down.",
-    },
-    {
-        "query": "Which product is recommended for wet mountain conditions?",
-        "answer": "The ArcticShell Waterproof Jacket is ideal for wet mountain conditions.",
-    },
-    {
-        "query": "Can the SummitTrek Hiking Pants be converted to shorts?",
-        "answer": "Yes, the SummitTrek Hiking Pants have zip-off lower legs that convert them to shorts.",
-    },
-    {
-        "query": "What type of wool is used in the AlpineBase Merino Top?",
-        "answer": "The AlpineBase Merino Top uses 18.5-micron merino wool.",
-    },
+    {"query": g["qa_pairs"]["query"], "answer": g["qa_pairs"]["answer"]}
+    for g in generated
 ]
 
 # ---------------------------------------------------------------------------
@@ -112,7 +103,7 @@ for i, (example, prediction, grade) in enumerate(
 
     print(f"\nExample {i}")
     print(f"  Query    : {example['query']}")
-    print(f"  Expected : {example['answer']}")
+    print(f"  Answer : {example['answer']}")
     print(f"  Predicted: {prediction['result'].strip()}")
     print(f"  LLM Grade: {result_text}")
 
