@@ -41,6 +41,15 @@ Demonstrates how to compose multiple LLM calls into pipelines using LangChain's 
 | `sequential_chain.py` | **SequentialChain** — Multi-step pipeline with named inputs and outputs across steps |
 | `router_chain.py` | **Router Chain** — Dynamically routes input to the most appropriate sub-chain based on content |
 
+### Chapter 4 — Q&A over Documents
+
+Demonstrates Retrieval-Augmented Generation (RAG): loading a product catalog, embedding it into a vector store, and answering natural-language questions grounded in that data.
+
+| File | Description |
+|------|-------------|
+| `qa_over_documents.py` | **RAG pipeline** — Loads CSV documents, indexes them in an in-memory vector store, and answers natural-language questions using `VectorstoreIndexCreator` |
+| `data/outdoor_clothing.csv` | Sample outdoor product catalog used as the document corpus |
+
 ## Shared Files
 
 - `read_key.py` - Initializes the Hugging Face client with authentication
@@ -67,6 +76,11 @@ Demonstrates how to compose multiple LLM calls into pipelines using LangChain's 
    ```
 
    > **Note:** `langchain-classic` is required for `ConversationChain` and `ConversationBufferMemory`, which were removed from the core `langchain` package in version 1.x.
+
+   For Chapter 4 (Q&A over Documents), also install:
+   ```bash
+   pip install sentence-transformers
+   ```
 
 3. Create a `.env` file with your Hugging Face token:
    ```
@@ -99,6 +113,11 @@ python sequential_chain.py         # SequentialChain — multi-input/output pipe
 python router_chain.py             # Router Chain — dynamic routing to sub-chains
 ```
 
+### Chapter 4
+```bash
+python qa_over_documents.py        # RAG pipeline — Q&A over a product catalog
+```
+
 ## Key Concepts by Chapter
 
 ### Chapter 1 — Models, Prompts and Parsers
@@ -122,7 +141,15 @@ python router_chain.py             # Router Chain — dynamic routing to sub-cha
 - **Router Chain** — Conditional routing; selects the best sub-chain for the given input
 - LCEL `|` operator for composing chains declaratively
 
+### Chapter 4 — Q&A over Documents
+- **Document loading** — inline `CSVLoader` using Python's built-in `csv` module; produces `langchain_core` `Document` objects with no third-party loader dependency
+- **Embeddings** — `HuggingFaceEmbeddings` with `sentence-transformers` for local, API-free vector representations
+- **Vector store** — `InMemoryVectorStore` from `langchain_core` for lightweight, in-process similarity search
+- **Index** — `VectorstoreIndexCreator` from `langchain_classic` wires loader → splitter → vector store in one call
+- **Querying** — `index.query(question, llm=llm)` for retrieval-augmented answer generation
+
 ## Environment Variables
 
 - `HF_TOKEN` or `HUGGINGFACEHUB_API_TOKEN` - Your Hugging Face API token (required)
 - `HF_MODEL` - Model ID to use (default: `Qwen/Qwen2.5-7B-Instruct`)
+- `HF_EMBED_MODEL` - Sentence-transformers model for embeddings (default: `sentence-transformers/all-MiniLM-L6-v2`)
