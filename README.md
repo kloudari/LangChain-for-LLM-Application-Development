@@ -50,6 +50,14 @@ Demonstrates Retrieval-Augmented Generation (RAG): loading a product catalog, em
 | `qa_over_documents.py` | **RAG pipeline** — Loads CSV documents, indexes them in an in-memory vector store, and answers natural-language questions using `VectorstoreIndexCreator` |
 | `data/outdoor_clothing.csv` | Sample outdoor product catalog used as the document corpus |
 
+### Chapter 5 — Evaluation
+
+Covers how to assess the quality of RAG pipelines by comparing model answers against expected ground-truth answers.
+
+| File | Description |
+|------|-------------|
+| `qa_manual_evaluation.py` | **Manual evaluation** — Runs 5 hard-coded `(query, expected answer)` pairs through the RAG pipeline, performs keyword-overlap scoring, and prints a `CORRECT / INCORRECT` verdict with a final score |
+
 ## Shared Files
 
 - `read_key.py` - Initializes the Hugging Face client with authentication
@@ -118,6 +126,11 @@ python router_chain.py             # Router Chain — dynamic routing to sub-cha
 python qa_over_documents.py        # RAG pipeline — Q&A over a product catalog
 ```
 
+### Chapter 5
+```bash
+python qa_manual_evaluation.py     # Manual evaluation — hard-coded QA pairs with keyword scoring
+```
+
 ## Key Concepts by Chapter
 
 ### Chapter 1 — Models, Prompts and Parsers
@@ -146,7 +159,13 @@ python qa_over_documents.py        # RAG pipeline — Q&A over a product catalog
 - **Embeddings** — `HuggingFaceEmbeddings` with `sentence-transformers` for local, API-free vector representations
 - **Vector store** — `InMemoryVectorStore` from `langchain_core` for lightweight, in-process similarity search
 - **Index** — `VectorstoreIndexCreator` from `langchain_classic` wires loader → splitter → vector store in one call
-- **Querying** — `index.query(question, llm=llm)` for retrieval-augmented answer generation
+- **Querying** — `index.query(question, llm=llm, chain_type="stuff")` for retrieval-augmented answer generation; `chain_type` controls how retrieved docs are combined (`stuff` / `map_reduce` / `refine` / `map_rerank`)
+
+### Chapter 5 — Evaluation
+- **Manual evaluation** — hard-coded `(query, expected answer)` pairs serve as a ground-truth test set
+- **Keyword-overlap scoring** — checks whether key words from the expected answer appear in the model's response
+- **Verdict & score** — each example is labelled `CORRECT` / `INCORRECT`; a final `X/N (%)` score is printed
+- Basis for more advanced approaches: LLM-as-judge, `QAEvalChain`, or embedding-similarity scoring
 
 ## Environment Variables
 
