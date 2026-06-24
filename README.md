@@ -57,6 +57,7 @@ Covers how to assess the quality of RAG pipelines by comparing model answers aga
 | File | Description |
 |------|-------------|
 | `qa_manual_evaluation.py` | **Manual evaluation** — Runs 5 hard-coded `(query, expected answer)` pairs through the RAG pipeline, performs keyword-overlap scoring, and prints a `CORRECT / INCORRECT` verdict with a final score |
+| `qa_llm_evaluation.py` | **LLM-assisted evaluation** — Same QA pairs evaluated by `QAEvalChain` (LLM-as-judge): the model compares each prediction against the expected answer and returns a `CORRECT / INCORRECT` grade |
 
 ## Shared Files
 
@@ -129,6 +130,7 @@ python qa_over_documents.py        # RAG pipeline — Q&A over a product catalog
 ### Chapter 5
 ```bash
 python qa_manual_evaluation.py     # Manual evaluation — hard-coded QA pairs with keyword scoring
+python qa_llm_evaluation.py        # LLM-assisted evaluation — QAEvalChain grades each prediction
 ```
 
 ## Key Concepts by Chapter
@@ -164,8 +166,9 @@ python qa_manual_evaluation.py     # Manual evaluation — hard-coded QA pairs w
 ### Chapter 5 — Evaluation
 - **Manual evaluation** — hard-coded `(query, expected answer)` pairs serve as a ground-truth test set
 - **Keyword-overlap scoring** — checks whether key words from the expected answer appear in the model's response
-- **Verdict & score** — each example is labelled `CORRECT` / `INCORRECT`; a final `X/N (%)` score is printed
-- Basis for more advanced approaches: LLM-as-judge, `QAEvalChain`, or embedding-similarity scoring
+- **LLM-assisted evaluation** — `QAEvalChain.from_llm(llm)` uses the model itself as a judge; it compares each prediction against the expected answer and returns `CORRECT` / `INCORRECT`
+- **`QAEvalChain`** — from `langchain_classic.evaluation.qa`; accepts `examples` (with `query` / `answer` keys) and `predictions` (with `result` key)
+- **Verdict & score** — each example is labelled and a final `X/N (%)` score is printed for both approaches
 
 ## Environment Variables
 
