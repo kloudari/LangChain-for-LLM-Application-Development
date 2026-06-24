@@ -54,5 +54,5 @@ index = VectorstoreIndexCreator(
 
 # Query
 query = "Please list all your shirts with sun protection in a table in markdown and summarize each one."
-response = index.query(query, llm=llm)
+response = index.query(query, llm=llm, chain_type="stuff")
 print(response)
