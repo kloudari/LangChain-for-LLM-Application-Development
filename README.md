@@ -30,6 +30,17 @@ Explores different memory types to manage conversational context in multi-turn i
 | `conversation_token_buffer_memory.py` | **ConversationTokenBufferMemory** — Keeps messages up to a token limit; manages memory by token count |
 | `conversation_summary_memory.py` | **ConversationSummaryMemory** — Summarizes old messages; condenses history while preserving key information |
 
+### Chapter 3 — Chains
+
+Demonstrates how to compose multiple LLM calls into pipelines using LangChain's chain abstractions:
+
+| File | Description |
+|------|-------------|
+| `llmchain.py` | **LLMChain** — Single prompt + LLM + parser wired as a LCEL chain |
+| `simple_sequential_chain.py` | **SimpleSequentialChain** — Two chains in sequence; output of one feeds into the next (single input/output) |
+| `sequential_chain.py` | **SequentialChain** — Multi-step pipeline with named inputs and outputs across steps |
+| `router_chain.py` | **Router Chain** — Dynamically routes input to the most appropriate sub-chain based on content |
+
 ## Shared Files
 
 - `read_key.py` - Initializes the Hugging Face client with authentication
@@ -80,6 +91,14 @@ python conversation_token_buffer_memory.py        # token-limited history
 python conversation_summary_memory.py             # AI-summarized history
 ```
 
+### Chapter 3
+```bash
+python llmchain.py                # LLMChain — single prompt chain
+python simple_sequential_chain.py  # SimpleSequentialChain — linear two-step pipeline
+python sequential_chain.py         # SequentialChain — multi-input/output pipeline
+python router_chain.py             # Router Chain — dynamic routing to sub-chains
+```
+
 ## Key Concepts by Chapter
 
 ### Chapter 1 — Models, Prompts and Parsers
@@ -95,6 +114,13 @@ python conversation_summary_memory.py             # AI-summarized history
 - **ConversationSummaryMemory** — LLM-powered summarization (condenses conversation)
 - `ConversationChain` to wire memory into a chat model
 - Comparing memory strategies for long conversations
+
+### Chapter 3 — Chains
+- **LLMChain** — Basic building block: prompt → LLM → parser
+- **SimpleSequentialChain** — Linear pipeline; single string passed between steps
+- **SequentialChain** — Multi-variable pipeline; named inputs/outputs flow between steps
+- **Router Chain** — Conditional routing; selects the best sub-chain for the given input
+- LCEL `|` operator for composing chains declaratively
 
 ## Environment Variables
 
